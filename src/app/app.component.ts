@@ -5,6 +5,7 @@ import { EmpIdValidator } from './validators/empIdValidators';
 import { state } from '@angular/animations';
 import { countries } from './shared/const/country';
 import { states } from './shared/const/state';
+import { __values } from 'tslib';
 
 @Component({
   selector: 'app-root',
@@ -23,7 +24,61 @@ patterns = {
   }
   ngOnInit(): void {
     
-    this.singUpForm= new FormGroup({
+    this.createSingUpForm()
+    this.isAddSame()
+    this.isSameAddressHandler()
+    this.addDependent()
+    this.isconfirmpassword()
+
+
+
+
+  }
+
+isSameAddressHandler(){
+      this.formControls['isAddSame'].valueChanges
+    .subscribe(val=>{
+
+      if(val){
+        let currentAdd=this.formControls['currentAddress'].value;
+        this.formControls['parmanentAddress'].patchValue(currentAdd)
+        this.formControls['parmanentAddress'].disable()
+      }else{
+        this.formControls['parmanentAddress'].reset()
+        this.formControls['parmanentAddress'].enable()
+      }
+    })
+}
+
+isAddSame(){
+      this.formControls['currentAddress'].valueChanges
+    .subscribe(res=>{
+     
+      if(this.formControls['currentAddress'].valid){
+this.formControls['isAddSame'].enable()
+      }else{
+  this.formControls['isAddSame'].disable();
+  this.formControls['isAddSame'].reset()
+      }
+     
+    })
+
+}
+
+isconfirmpassword(){
+  this.formControls['password'].valueChanges
+  .subscribe(val=>{
+if(this.formControls['password'].valid){
+  this.formControls['confirmPassword'].enable()
+}else{
+  this.formControls['confirmPassword'].disable()
+  this.formControls['confirmPassword'].reset()
+}
+  })
+}
+
+createSingUpForm(){
+  this.singUpForm= new FormGroup({
       UserName: new FormControl(null,[
         Validators.required,
         Validators.minLength(6),
@@ -55,19 +110,57 @@ patterns = {
         skills: new FormArray([new FormControl('js')]),
 
         currentAddress:new FormGroup({
-          country:new FormControl(null,[Validators.required]),
+          country:new FormControl("india",[Validators.required]),
           state:new FormControl(null,[Validators.required]),
           city:new FormControl(null,[Validators.required]),
           zipcode:new FormControl(null,[Validators.required])
         }),
-        addressSame:new FormControl(null)
+
+                parmanentAddress:new FormGroup({
+          country:new FormControl("india",[Validators.required]),
+          state:new FormControl(null,[Validators.required]),
+          city:new FormControl(null,[Validators.required]),
+          zipcode:new FormControl(null,[Validators.required])
+        }),
+
+        isAddSame:new FormControl(),
+       confirmPassword:new FormControl({value:null,disabled:true}),
+       
+        password:new FormControl(null,[Validators.required,Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)]),
+        dependents:new FormArray([
+          new FormGroup({
+            fullName: new FormControl(null,[Validators.required]),
+            relationship: new FormControl(null,[Validators.required]),
+            citizineship: new FormControl(null,[Validators.required]),
+            isrealingwithyou: new FormControl(null,[Validators.required])
+
+
+          }),
+    
+    
+        ])
+
 
 
 
     })
 
+}
 
-  }
+addDependent(){
+if(this.dependentArr.valid){
+    let dependentGroup= new FormGroup({
+     fullName: new FormControl(null,[Validators.required]),
+            relationship: new FormControl(null,[Validators.required]),
+            citizineship: new FormControl(null,[Validators.required]),
+            isrealingwithyou: new FormControl(null,[Validators.required])
+
+
+  })
+  this.dependentArr.push(dependentGroup)
+}
+}
+
 onSingUp(){
 
   console.log(this.singUpForm)
@@ -87,7 +180,9 @@ get skillsArr(){
 }
 
 
-
+get dependentArr(){
+  return this.singUpForm.get('dependents') as FormArray
+}
 onSkillsAdd(){
   let control= new FormControl(null,[Validators.required]);
   this.skillsArr.push(control)

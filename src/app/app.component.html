@@ -147,7 +147,7 @@
 
           </div>
           <div class="col-md-6">
-                <div formGroupName="currentAddress">
+                <div formGroupName="parmanentAddress">
               <h6>parmanent Address</h6>
               <div class="form-group">
                 <label for="country">Country</label>
@@ -158,25 +158,108 @@
               </div>
               <div class="form-group">
                 <label for="state">state</label>
-                <input formControlName="state" type="text" class="form-control">
+                <input id="car-state" formControlName="state" type="text" class="form-control">
               </div>
               <div class="form-group">
                 <label for="city">city</label>
-                <input type="text" formControlName="city" class="form-control">
+                <input id="car-city" type="text" formControlName="city" class="form-control">
               </div>
               <div class="form-group">
                 <label for="zipcode">zipcode</label>
-                <input type="text" formControlName="zipcode" class="form-control">
+                <input id="car-zipcode" type="text" formControlName="zipcode" class="form-control">
               </div>
             </div>
           </div>
 
 
         </div>
-        <input formControlName="addressSame" type="checkbox">
-        <label class="ml-2" for="">current and parmanent Address is Same</label>
+        <div class="col-12">
+          <div class="form-group">
+        <input formControlName="isAddSame" id="isAddSame" type="checkbox">
+        <label class="ml-2" for="isAddSame">current and parmanent Address is Same</label>
+          </div>
+        </div>
+
+<div formArrayName="dependents">
+  <h5>
+    Dependents
+  </h5>
+  <div *ngFor="let dependents of dependentArr.controls; let i=index">
+<div class="row" [formGroupName]="i">
+  <div class="col">
+    <div class="form-group">
+<input type="text" formControlName="fullName" class="form-control"
+placeholder="fullName">
+    </div>
 
 
+  </div>
+  <div class="col">
+    <div class="form-group">
+<input type="text" formControlName="relationship" class="form-control"
+placeholder="relationship">
+    </div>
+
+
+  </div>
+
+
+  <div class="col">
+    <div class="form-group">
+<input type="text" formControlName="citizineship" class="form-control"
+placeholder="citizineship">
+
+    </div>
+
+  </div>
+  <div class="col">
+    <div class="form-group">
+<select type="text" formControlName="isrealingwithyou" class="form-control">
+
+  <option [value]="true">Yes</option>
+  <option [value]="false">False</option>
+  
+</select>
+
+    </div>
+
+  </div>
+  <div class="col">
+              <button *ngIf="i>0" class="btn btn-sm btn-outline-danger">Remove</button>
+    
+  </div>
+
+</div>
+
+
+  </div>
+<div class="row">
+  <div class="col-12 mb-2"
+  >
+ <button *ngIf="dependentArr.length<5; else maxLimiTdependences" [disabled]="dependentArr.invalid" (click)="addDependent()" type="button" mat-raised-button class="btn-sm" color="primary">Add Dependent</button>
+<ng-template #maxLimiTdependences>
+<p class="alert alert-warning"> you can add only 5 dependents</p>
+</ng-template>
+  </div>
+</div>
+</div>
+
+<div class="form-group">
+  <label for="password">password</label>
+  <input type="password" formControlName="password" id="password" class="form-control">
+  <small class="text-danger" 
+  *ngIf="formControls['password'].touched&& formControls['password'].hasError('required')"
+  >
+    password is required field!!!
+  </small>
+  <small class="text-danger" *ngIf="formControls['password'].dirty&& formControls['password'].hasError('pattern')">
+    plz Enter valid password(password contain 1 lowercase, 1 uppercase , special char and number)
+  </small>
+</div>
+<div class="form-group">
+  <label for="confirmPassword">confirmPassword</label>
+  <input type="confirmPassword" formControlName="confirmPassword" id="confirmPassword" class="form-control">
+</div>
         <button type="submit" class="btn-block" mat-raised-button color="primary">SingUp</button>
       </form>
     </div>
