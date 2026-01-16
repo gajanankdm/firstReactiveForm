@@ -166,6 +166,7 @@ onSingUp(){
   console.log(this.singUpForm)
   console.log(this.singUpForm.controls)
 
+
 }
 get formControls(){
   return this.singUpForm.controls
@@ -191,7 +192,9 @@ onSkillsAdd(){
 onRemove(i : number){
   this.skillsArr.removeAt(i)
 }
-
+onremove(i:number){
+  this.dependentArr.removeAt(i)
+}
 
 // RemoveSkills(i:number){
 // this.skillsArr.removeAt(i)
